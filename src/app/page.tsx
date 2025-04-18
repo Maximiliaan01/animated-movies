@@ -412,18 +412,79 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+            className="space-y-8"
           >
-            {displayedMovies.map((movie) => (
-              <MovieCard
-                key={movie.title}
-                title={movie.title}
-                imageUrl={movie.imageUrl}
-                description={movie.description}
-                isRanaSection={activeSection === 'rana'}
-                onWatchedStatusChange={updateWatchedMovies}
-              />
-            ))}
+            {/* Rana bölümü için normal gösterim */}
+            {activeSection === 'rana' ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {displayedMovies.map((movie) => (
+                  <MovieCard
+                    key={movie.title}
+                    title={movie.title}
+                    imageUrl={movie.imageUrl}
+                    description={movie.description}
+                    isRanaSection={true}
+                    onWatchedStatusChange={updateWatchedMovies}
+                  />
+                ))}
+              </div>
+            ) : (
+              <>
+                {/* İzlenen filmler bölümü */}
+                {displayedMovies.filter(movie => watchedMovieTitles.includes(movie.title)).length > 0 && (
+                  <>
+                    <div className="flex items-center gap-2 mb-4">
+                      <h2 className="text-xl font-bold text-green-400">İzlediğiniz Filmler</h2>
+                      <div className="flex-1 h-0.5 bg-green-500/30 rounded"></div>
+                      <span className="bg-green-500 text-white px-2 py-1 rounded-full text-sm">
+                        {displayedMovies.filter(movie => watchedMovieTitles.includes(movie.title)).length}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                      {displayedMovies
+                        .filter(movie => watchedMovieTitles.includes(movie.title))
+                        .map((movie) => (
+                          <MovieCard
+                            key={movie.title}
+                            title={movie.title}
+                            imageUrl={movie.imageUrl}
+                            description={movie.description}
+                            isRanaSection={false}
+                            onWatchedStatusChange={updateWatchedMovies}
+                          />
+                        ))}
+                    </div>
+                  </>
+                )}
+
+                {/* İzlenmeyen filmler bölümü */}
+                {displayedMovies.filter(movie => !watchedMovieTitles.includes(movie.title)).length > 0 && (
+                  <>
+                    <div className="flex items-center gap-2 mt-8 mb-4">
+                      <h2 className="text-xl font-bold text-blue-300">Keşfedilmemiş Filmler</h2>
+                      <div className="flex-1 h-0.5 bg-blue-500/30 rounded"></div>
+                      <span className="bg-blue-500 text-white px-2 py-1 rounded-full text-sm">
+                        {displayedMovies.filter(movie => !watchedMovieTitles.includes(movie.title)).length}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                      {displayedMovies
+                        .filter(movie => !watchedMovieTitles.includes(movie.title))
+                        .map((movie) => (
+                          <MovieCard
+                            key={movie.title}
+                            title={movie.title}
+                            imageUrl={movie.imageUrl}
+                            description={movie.description}
+                            isRanaSection={false}
+                            onWatchedStatusChange={updateWatchedMovies}
+                          />
+                        ))}
+                    </div>
+                  </>
+                )}
+              </>
+            )}
           </motion.div>
         </AnimatePresence>
       </div>
