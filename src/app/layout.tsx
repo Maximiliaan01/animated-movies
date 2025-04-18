@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Animated Movies Collection",
+  title: "Melih'e Kız Bulun!!!",
   description: "A modern collection of animated movies curated by Melih Turan",
 };
 
