@@ -300,37 +300,25 @@ const movies = {
 
 // Film verileri için görsel kaynağı
 const getMovieImage = (title: string, index: number, section: string = '') => {
-  // Kategoriye göre renk şemaları
-  let colorScheme = '';
+  // Animasyon filmi türlerine göre anahtar kelimeler 
+  const keywords = [
+    'animation', 'cartoon', 'pixar', 'disney',
+    'animated film', 'anime', '3d animation',
+    'animation characters', 'animated movie'
+  ];
   
-  if (section === 'rana') {
-    colorScheme = 'ff6b96,ff8fab'; // Pembe tonları
-  } else if (section === 'special') {
-    colorScheme = '9333ea,a855f7'; // Mor tonları
-  } else if (section === 'explore') {
-    colorScheme = 'f59e0b,fbbf24'; // Amber tonları
-  } else {
-    // İzlediklerim bölümü için farklı renkler
-    const subtypes = ['0ea5e9,38bdf8', '06b6d4,22d3ee', '0284c7,0ea5e9', '0369a1,0284c7'];
-    const subtype = subtypes[index % subtypes.length];
-    colorScheme = subtype; // Farklı mavi tonları
-  }
+  // Her film için döngüsel olarak bir anahtar kelime seç
+  const keyword = keywords[index % keywords.length];
   
-  // Film adını URL için güvenli hale getir ve kısalt
-  let displayTitle = title;
-  if (title.length > 25) {
-    const words = title.split(' ');
-    if (words.length > 3) {
-      displayTitle = words.slice(0, 3).join(' ') + '...';
-    } else {
-      displayTitle = title.substring(0, 22) + '...';
-    }
-  }
+  // Film adının ilk kelimesini al
+  const titleWords = title.toLowerCase().split(' ');
+  const firstWord = titleWords[0];
   
-  const encodedTitle = encodeURIComponent(displayTitle);
+  // Rana bölümü için farklı görüntüler
+  const category = section === 'rana' ? 'broken+heart' : 'animation';
   
-  // Hızlı, güvenilir ve güzel bir görsel servis kullanarak posterler oluştur
-  return `https://placehold.co/400x600/gradient/${colorScheme}?text=${encodedTitle}&font=bebas`;
+  // Ücretsiz yüksek kaliteli görseller - animasyon temalı
+  return `https://picsum.photos/seed/${firstWord}${index}/400/600`;
 };
 
 // Bir diziyi karıştırma fonksiyonu
@@ -347,7 +335,7 @@ function shuffleArray<T>(array: T[]): T[] {
 const updateImageUrls = () => {
   Object.keys(movies).forEach((section) => {
     movies[section as keyof typeof movies].forEach((movie, index) => {
-      // Kategori bazlı görsel ata
+      // Animasyon temalı görseller ata
       movie.imageUrl = getMovieImage(movie.title, index, section);
     });
   });
