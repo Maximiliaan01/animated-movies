@@ -60,16 +60,19 @@ export default function MovieCard({
         className={`
           relative group cursor-pointer
           rounded-lg overflow-hidden transition-all duration-300
-          ${isRanaSection ? 'border-3 border-pink-400/70' : 'border-3 border-blue-400/50'}
+          ${isRanaSection ? 'border-3 border-pink-400/70 shadow-pink-500/20' : 'border-3 border-blue-400/50'}
           ${isWatched ? 'border-3 border-green-500' : ''}
           shadow-lg hover:shadow-2xl
           bg-gray-800/80 backdrop-blur-sm
         `}
-        whileHover={{ scale: 1.05 }}
+        whileHover={{ scale: isRanaSection ? 1.02 : 1.05 }}
         transition={{ duration: 0.2 }}
       >
         <div 
-          className="relative w-full h-[220px] rounded-lg overflow-hidden"
+          className={`
+            relative w-full h-[220px] rounded-lg overflow-hidden
+            ${isRanaSection ? 'grayscale' : ''}
+          `}
           onClick={() => setIsModalOpen(true)}
         >
           {/* Görsel veya Placeholder */}
@@ -99,6 +102,21 @@ export default function MovieCard({
               <span className="text-white font-bold text-xl text-center px-4 py-2 bg-black/40 rounded-md backdrop-blur-sm border border-white/20 shadow-inner">
                 {title}
               </span>
+            </div>
+          )}
+          
+          {/* Rana bölümü için kırık kalp efekti */}
+          {isRanaSection && (
+            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex flex-col items-center justify-center z-30 drop-shadow-lg">
+              <div className="animate-pulse">
+                <svg className="w-20 h-20 text-pink-500 mb-2 drop-shadow-md" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 21.35l-1.45-1.32c-5.15-4.67-8.55-7.75-8.55-11.53 0-3.08 2.42-5.5 5.5-5.5 1.74 0 3.41.81 4.5 2.09 1.09-1.28 2.76-2.09 4.5-2.09 0.81 0 1.59.18 2.3.51 0.13.06.29.17.45.31 0.15.14.32.3.52.5l-3.26 3.26c-.79.8-2.07.8-2.86 0l-1.42-1.42-.7.7 1.42 1.42c.57.57 1.32.85 2.07.85s1.49-.28 2.07-.85l2.15-2.15c.97 1.3 1.51 2.75 1.51 4.22 0 3.78-3.4 6.86-8.55 11.53l-1.44 1.3z"/>
+                  <path d="M18.3 5.71a.996.996 0 0 0 0-1.41l-2.12-2.12a.996.996 0 1 0-1.41 1.41l2.12 2.12c.39.39 1.02.39 1.41 0z"/>
+                </svg>
+              </div>
+              <p className="text-white font-bold text-center px-4 py-2 rounded-md bg-pink-900/70 border border-pink-700/50 shadow-inner">
+                Kalbim Kırıldı 💔
+              </p>
             </div>
           )}
           
