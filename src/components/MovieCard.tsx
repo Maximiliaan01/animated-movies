@@ -86,12 +86,12 @@ export default function MovieCard({
                 alt={title}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                className="object-cover"
+                className="object-cover hover:scale-105 transition-transform duration-700"
                 onError={() => setImageError(true)}
                 priority={false}
-                quality={30} // Düşük kalite (10-40 arası) - siteyi kastırmaması için
+                quality={50} // Orta kalite
               />
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 z-10" />
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 z-10" />
             </>
           ) : (
             <div 
