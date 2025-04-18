@@ -299,12 +299,30 @@ const movies = {
 };
 
 // Film verileri için görsel kaynağı
-const getMovieImage = (title: string, index: number) => {
-  // Görsel isimlerini dosya sistemiyle uyumlu olacak şekilde düzenle
-  const formattedTitle = title.toLowerCase().replace(/[^a-z0-9]/g, '_');
+const getMovieImage = (title: string, index: number, section: string = '') => {
+  // Film adının ilk harfini kullan
+  const charCode = title.charCodeAt(0) || 65;
+  const index_offset = index * 37; // Her film için farklı bir renk tonu
+  const hue = (charCode * 137 + index_offset) % 360;
+  const sat = 70 + (index % 20); // Renk doygunluğunu biraz değiştir
   
-  // Görselin yolunu oluştur (public klasöründe images dizini)
-  return `/images/${formattedTitle}.jpg`;
+  // Kategoriye göre renk şemaları
+  let colorScheme = '';
+  if (section === 'rana') {
+    colorScheme = 'ff6b96,ff8fab'; // Pembe tonları
+  } else if (section === 'special') {
+    colorScheme = '9333ea,a855f7'; // Mor tonları
+  } else if (section === 'explore') {
+    colorScheme = 'f59e0b,fbbf24'; // Amber tonları
+  } else {
+    colorScheme = '0ea5e9,38bdf8'; // Mavi tonları
+  }
+  
+  // Film adını URL için güvenli hale getir
+  const encodedTitle = encodeURIComponent(title);
+  
+  // Güvenilir ve hızlı bir görsel servis kullanarak güzel posterler oluştur
+  return `https://placehold.co/400x600/gradient/${colorScheme}?text=${encodedTitle}`;
 };
 
 // Bir diziyi karıştırma fonksiyonu
@@ -321,8 +339,8 @@ function shuffleArray<T>(array: T[]): T[] {
 const updateImageUrls = () => {
   Object.keys(movies).forEach((section) => {
     movies[section as keyof typeof movies].forEach((movie, index) => {
-      // Yerel görsel yolunu ata
-      movie.imageUrl = getMovieImage(movie.title, index);
+      // Kategori bazlı görsel ata
+      movie.imageUrl = getMovieImage(movie.title, index, section);
     });
   });
 };

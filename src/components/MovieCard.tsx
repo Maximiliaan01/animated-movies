@@ -39,6 +39,9 @@ export default function MovieCard({
     }
   };
   
+  // Görsel URL'si geçerli mi kontrol et
+  const isValidImageUrl = imageUrl && (imageUrl.startsWith('/') || imageUrl.startsWith('http')) && !imageError;
+  
   // Film afişleri için düşük kaliteli kaynaklar kullanacağız
   // Hata olursa veya URL boşsa renkli placeholder göster
   const generatePlaceholder = () => {
@@ -50,9 +53,6 @@ export default function MovieCard({
   };
 
   const bgColor = generatePlaceholder();
-  
-  // Görsel URL'si geçerli mi kontrol et
-  const isValidImageUrl = imageUrl && imageUrl.startsWith('/') && !imageError;
   
   // Varsayılan görsel yolu - görsel bulunamazsa kullanılacak
   const defaultImage = '/images/default_movie.jpg';
