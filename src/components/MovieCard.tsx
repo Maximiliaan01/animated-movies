@@ -96,7 +96,7 @@ export default function MovieCard({
                   : `linear-gradient(135deg, ${bgColor}, ${bgColor}90)`
               }}
             >
-              <span className="text-white font-bold text-xl text-center px-2 py-1 bg-black/30 rounded">
+              <span className="text-white font-bold text-xl text-center px-4 py-2 bg-black/40 rounded-md backdrop-blur-sm border border-white/20 shadow-inner">
                 {title}
               </span>
             </div>
@@ -117,8 +117,9 @@ export default function MovieCard({
             onClick={handleWatchedToggle}
             className={`
               absolute top-2 right-2 z-20 p-2 rounded-full 
-              transition-colors duration-300
-              ${isWatched ? 'bg-green-500 text-white' : 'bg-gray-200/80 text-gray-800'}
+              transition-colors duration-300 border-2
+              ${isWatched ? 'bg-green-500 text-white border-white' : 'bg-gray-200/90 text-gray-800 border-gray-400'}
+              hover:scale-110 transform transition-transform
             `}
             aria-label={isWatched ? "İzlendi olarak işaretle" : "İzlendi işaretini kaldır"}
           >
