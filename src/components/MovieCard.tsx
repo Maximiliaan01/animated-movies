@@ -52,7 +52,10 @@ export default function MovieCard({
   const bgColor = generatePlaceholder();
   
   // Görsel URL'si geçerli mi kontrol et
-  const isValidImageUrl = imageUrl && imageUrl.startsWith('http') && !imageError;
+  const isValidImageUrl = imageUrl && imageUrl.startsWith('/') && !imageError;
+  
+  // Varsayılan görsel yolu - görsel bulunamazsa kullanılacak
+  const defaultImage = '/images/default_movie.jpg';
   
   return (
     <>

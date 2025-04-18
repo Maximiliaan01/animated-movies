@@ -298,13 +298,13 @@ const movies = {
   ],
 };
 
-// Film verileri için alternatif görsel kaynağı
-const getPlaceholderImage = (title: string, index: number) => {
-  // Rastgele renk oluşturmak için film adının ilk harfini kullan
-  const charCode = title.charCodeAt(0) || 65;
-  const hue = (charCode * 137 + index * 30) % 360; // Renk çeşitliliği için index ekle
-  const color = `${hue},70%,50%`;
-  return `https://placehold.co/600x400/hsla(${color},1)/FFFFFF?text=${encodeURIComponent(title)}`;
+// Film verileri için görsel kaynağı
+const getMovieImage = (title: string, index: number) => {
+  // Görsel isimlerini dosya sistemiyle uyumlu olacak şekilde düzenle
+  const formattedTitle = title.toLowerCase().replace(/[^a-z0-9]/g, '_');
+  
+  // Görselin yolunu oluştur (public klasöründe images dizini)
+  return `/images/${formattedTitle}.jpg`;
 };
 
 // Bir diziyi karıştırma fonksiyonu
@@ -318,18 +318,17 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 // Tüm filmleri geç ve resim URL'lerini düzelt
-const fixImageUrls = () => {
-  // Hiçbir koşul olmadan tüm film URL'lerini yer tutucu görsellerle değiştir
+const updateImageUrls = () => {
   Object.keys(movies).forEach((section) => {
     movies[section as keyof typeof movies].forEach((movie, index) => {
-      // Doğrudan yer tutucu görsel ata, orijinal URL'leri kullanma
-      movie.imageUrl = getPlaceholderImage(movie.title, index);
+      // Yerel görsel yolunu ata
+      movie.imageUrl = getMovieImage(movie.title, index);
     });
   });
 };
 
-// Uygulama başladığında tüm URL'leri otomatik olarak düzelt
-fixImageUrls();
+// Görsel URL'lerini güncelle
+updateImageUrls();
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState<Section>('watched');
