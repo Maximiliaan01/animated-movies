@@ -60,11 +60,12 @@ export default function MovieCard({
         className={`
           relative group cursor-pointer
           rounded-lg overflow-hidden transition-all duration-300
-          ${isRanaSection ? 'border-2 border-pink-300/30' : ''}
-          ${isWatched ? 'border-2 border-green-500' : ''}
-          shadow-md hover:shadow-xl
+          ${isRanaSection ? 'border-3 border-pink-400/70' : 'border-3 border-blue-400/50'}
+          ${isWatched ? 'border-3 border-green-500' : ''}
+          shadow-lg hover:shadow-2xl
+          bg-gray-800/80 backdrop-blur-sm
         `}
-        whileHover={{ scale: 1.03 }}
+        whileHover={{ scale: 1.05 }}
         transition={{ duration: 0.2 }}
       >
         <div 
@@ -103,8 +104,9 @@ export default function MovieCard({
           
           <div className="absolute bottom-0 left-0 right-0 p-3 z-20">
             <h3 className={`
-              text-base font-semibold text-white
+              text-base font-bold text-white
               ${isRanaSection ? 'text-pink-100' : ''}
+              bg-black/40 px-3 py-1 rounded-md inline-block backdrop-blur-sm
             `}>
               {title}
             </h3>
