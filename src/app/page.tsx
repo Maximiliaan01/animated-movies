@@ -300,125 +300,97 @@ const movies = {
 
 // Film verileri için görsel kaynağı
 const getMovieImage = (title: string, index: number, section: string = '') => {
-  // Her film için benzersiz bir hash değeri oluşturma
-  function generateHashFromString(input: string): number {
-    let hash = 0;
-    for (let i = 0; i < input.length; i++) {
-      const char = input.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash = hash & hash; // 32bit integer
-    }
-    return Math.abs(hash);
-  }
-  
-  // Film adından benzersiz bir hash değeri oluştur
-  const uniqueHash = generateHashFromString(title);
-  
-  // Daha geniş film posteri havuzu
-  const allPosters = [
-    // Pixar/Disney
-    'https://m.media-amazon.com/images/M/MV5BMDU2ZWJlMjktMTRhMy00ZTA5LWEzNDgtYmNmZTEwZTViZWJkXkEyXkFqcGdeQXVyNDQ2OTk4MzI@._V1_.jpg', // Toy Story
-    'https://lumiere-a.akamaihd.net/v1/images/p_frozen_18373_3131259c.jpeg', // Frozen
-    'https://m.media-amazon.com/images/M/MV5BMTY5OTU0OTc2NV5BMl5BanBnXkFtZTcwMzU4MDcyMQ@@._V1_.jpg', // Incredibles
-    'https://m.media-amazon.com/images/M/MV5BZTAzNWZlNmUtZDEzYi00ZjA5LWIwYjEtZGM1NWE1MjE4YWRhXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg', // Finding Nemo
-    'https://resizing.flixster.com/QIoVbPhKJHgbeJ1FGXgImVEEkBk=/v3/t/assets/p12575562_p_v10_aa.jpg', // Zootopia
-    'https://lumiere-a.akamaihd.net/v1/images/p_insideout_19751_af12286c.jpeg', // Inside Out
-    'https://m.media-amazon.com/images/M/MV5BMTk3NDE2NzI4NF5BMl5BanBnXkFtZTgwNzE1MzEyMTE@._V1_.jpg', // Up
-    'https://lumiere-a.akamaihd.net/v1/images/p_walle_19753_63bf7c27.jpeg', // WALL-E
-    'https://m.media-amazon.com/images/M/MV5BMjI4MzU5NTExNF5BMl5BanBnXkFtZTgwNzY1MTEwMDI@._V1_.jpg', // Moana
-    'https://m.media-amazon.com/images/M/MV5BMjMwNDkxMTgzOF5BMl5BanBnXkFtZTgwNTkwNTQ3NjM@._V1_.jpg', // Spider-Verse
-    'https://m.media-amazon.com/images/M/MV5BODJkZTZhMWItMDI3Yy00ZWZlLTk4NjQtOTI1ZjU5NjBjZTVjXkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_.jpg', // Kung Fu Panda
-    'https://lumiere-a.akamaihd.net/v1/images/p_brave_20488_9e833e2b.jpeg', // Brave
-    'https://m.media-amazon.com/images/M/MV5BZGE1MDg5M2MtNTkyZS00MTY5LTg1YjAtZTlhZmM1Y2EwNmFmXkEyXkFqcGdeQXVyNjA3OTI0MDc@._V1_.jpg', // Soul
-    'https://m.media-amazon.com/images/M/MV5BMTY1NTI0ODUyOF5BMl5BanBnXkFtZTgwNTEyNjQ0MDE@._V1_.jpg', // Monsters Inc
+  // Her film için güvenilir posterler
+  const posterMap: Record<string, string> = {
+    // Watched bölümü
+    'Toy Story Serisi': 'https://image.tmdb.org/t/p/w500/uXDfjJbdP4ijW5hWSBrPrlKpxab.jpg',
+    'Kung Fu Panda Serisi': 'https://image.tmdb.org/t/p/w500/wWt4JYXTg5Wr3xBW2phBrMKgp3x.jpg',
+    'Madagaskar Serisi': 'https://image.tmdb.org/t/p/w500/zPpGxp9nXxHLkIONyT0CC8FYHeZ.jpg',
+    'Zootopia': 'https://image.tmdb.org/t/p/w500/hlK0e0wAQ3VLuJcsfIYPvb4JVud.jpg',
+    'Big Hero 6': 'https://image.tmdb.org/t/p/w500/9gLu47Zw5ertuFTZaxXOvNfy78T.jpg',
+    'Cars Serisi': 'https://image.tmdb.org/t/p/w500/qa6HCwP4Z15l3hpsASz3auugEW6.jpg',
+    'How to Train Your Dragon Serisi': 'https://image.tmdb.org/t/p/w500/ygGmAO60t8GyqUo9xYeYxSZAR3b.jpg',
+    'The Incredibles Serisi': 'https://image.tmdb.org/t/p/w500/2mUqHJG4Y5Ux5oTPKN51kQ3PRwx.jpg',
+    'Monsters, Inc.': 'https://image.tmdb.org/t/p/w500/sgheSKxZkttIe8ONsf2sWXPgip3.jpg',
+    'WALL·E': 'https://image.tmdb.org/t/p/w500/Agc6lw8pb6BIGVegwvYHxG48KKn.jpg',
+    'Finding Nemo': 'https://image.tmdb.org/t/p/w500/eHuGQ10FUzK1mdOY69wF5pGgEf5.jpg',
+    'Moana': 'https://image.tmdb.org/t/p/w500/4JeRiWOvP6qcvwHXZyXtbK9JPVR.jpg',
+    'Turning Red': 'https://image.tmdb.org/t/p/w500/qsdjk9oAKSQMWs0Vt5Pyfh6O4GZ.jpg',
+    'Inside Out': 'https://image.tmdb.org/t/p/w500/2H1TmgdfNtsKlU9jKdeNyYL5y8T.jpg',
+    'Elemental': 'https://image.tmdb.org/t/p/w500/4Y1WNkd88JXmGfhtWR7dmDAo1T2.jpg',
+    'Soul': 'https://image.tmdb.org/t/p/w500/hm58Jw4Lw8OIeECIq5qyPYhAeRJ.jpg',
+    'Onward': 'https://image.tmdb.org/t/p/w500/f4aul3FyD3jv3v4bul1IrkWZvzq.jpg',
+    'Brave': 'https://image.tmdb.org/t/p/w500/1XAuDtMWpL0eNn0PV6YTh6C3neD.jpg',
+    'Puss in Boots: The Last Wish': 'https://image.tmdb.org/t/p/w500/kuf6dutpsT0vSVehic3EZIqkOBt.jpg',
+    'Despicable Me Serisi': 'https://image.tmdb.org/t/p/w500/teyD8Ca6zUwcwRvfaVDd0DrR6YF.jpg',
+    'Frozen Serisi': 'https://image.tmdb.org/t/p/w500/kgwjIb2JDHRhNk13lmSxiClFjVQ.jpg',
+    'Tangled': 'https://image.tmdb.org/t/p/w500/ym7Kst6a4uodryxqbGOxmewF235.jpg',
+    'The Mitchells vs. The Machines': 'https://image.tmdb.org/t/p/w500/q64FvAf1RYGhZD3Gh3H8YZd5TZl.jpg',
+    'Cloudy with a Chance of Meatballs': 'https://image.tmdb.org/t/p/w500/qhOhIHpY5Cb6z0Q7wFKpyAbxr3y.jpg',
+    'Wreck-It Ralph': 'https://image.tmdb.org/t/p/w500/93FsllrXXWrqEQJlLXA5HBMH0Zr.jpg',
+    'Megamind': 'https://image.tmdb.org/t/p/w500/6n2b01sM67tBnAu6sUc0pU0KdXm.jpg',
+    'The Lego Movie': 'https://image.tmdb.org/t/p/w500/lMHbadNmznKs5vgBAkHxKGHulOa.jpg',
+    'Encanto': 'https://image.tmdb.org/t/p/w500/4j0PNHkMr5ax3IA8tjtxcmPU3QT.jpg',
+    'Luca': 'https://image.tmdb.org/t/p/w500/jTswp6KyDYKtvC52GbHagrZbGvD.jpg',
+    'Monsters University': 'https://image.tmdb.org/t/p/w500/y7HKXUEECjWhbO7v5zk6n6R4rQq.jpg',
+    'Sing': 'https://image.tmdb.org/t/p/w500/qR9iyUH0dR1gISvCOh2taeCBEvS.jpg',
+    'Minions': 'https://image.tmdb.org/t/p/w500/vlOgaxUiMOA8sPDG9n3VhQabnEi.jpg',
+    'Rango': 'https://image.tmdb.org/t/p/w500/oHxKPJ1VzGx65O0DlSAIxjHfT0G.jpg',
+    'Flushed Away': 'https://image.tmdb.org/t/p/w500/u2GJsBiALyJknXHGOGH7PFKRcJr.jpg',
+    'Robots': 'https://image.tmdb.org/t/p/w500/8ndJdSGDDM2hJKzPHL3EGVZhH4U.jpg',
+    "Surf's Up": 'https://image.tmdb.org/t/p/w500/uCTL9EP8hNnzDg6TWk9MHSbfCMD.jpg',
+    'The Peanuts Movie': 'https://image.tmdb.org/t/p/w500/gRH3NiQ3QZAbUImzNKGCZOxnR3r.jpg',
+    'The Angry Birds Movie': 'https://image.tmdb.org/t/p/w500/nsaaHcexA8BtTj3tCQsJ05Di2QA.jpg',
+    'Epic': 'https://image.tmdb.org/t/p/w500/fdXA3X3zUZzXQgHp4B1WvRSx2Kq.jpg',
+    'The Good Dinosaur': 'https://image.tmdb.org/t/p/w500/8ZeYSe8FLBTXGZtyUtqGqAgm5Gw.jpg',
     
-    // DreamWorks/Illumination
-    'https://m.media-amazon.com/images/M/MV5BNjE5NzA4ZDctOTJkZi00NzM0LTkwOTYtMDI4MmNkMzIxODhkXkEyXkFqcGdeQXVyNjY1MTg4Mzc@._V1_.jpg', // Encanto
-    'https://m.media-amazon.com/images/M/MV5BMTcyOTc2OTA1Ml5BMl5BanBnXkFtZTcwOTI1MjkzOQ@@._V1_.jpg', // The Croods
-    'https://m.media-amazon.com/images/M/MV5BMTkwOTU5MTA2M15BMl5BanBnXkFtZTYwMjYyNzk2._V1_.jpg', // Lilo & Stitch
-    'https://m.media-amazon.com/images/M/MV5BZWNiOTc4NGItNGY4YS00ZGNkLThkOWEtMDE2ODcxODEwNjkwXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg', // Raya
-    'https://m.media-amazon.com/images/M/MV5BOWY4MmFiY2QtMzE1YS00NTg1LWIwOTQtYTI4ZGUzNWIxNTVmXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_.jpg', // Soul
-    'https://m.media-amazon.com/images/M/MV5BMjM2MDgxMDg0Nl5BMl5BanBnXkFtZTgwNTM2OTM5NDE@._V1_.jpg', // Inside Out
-    'https://m.media-amazon.com/images/M/MV5BMTk5MzU1MDMwMF5BMl5BanBnXkFtZTgwODkzODc5NTE@._V1_.jpg', // Good Dinosaur
+    // Explore bölümü
+    'Raya and the Last Dragon': 'https://image.tmdb.org/t/p/w500/lPsD10PP4rgUGiGR4CCXA6iY0QQ.jpg',
+    'Shark Tale': 'https://image.tmdb.org/t/p/w500/ireyxvzxdYtGOYX2FyNgzP9NTRD.jpg',
+    'The Croods': 'https://image.tmdb.org/t/p/w500/27zvFr4VgE9yCmWJVSr3xaWPZLT.jpg',
+    'Lilo & Stitch': 'https://image.tmdb.org/t/p/w500/d73UqZWyw3MUMpeaFUnum8L0Mnz.jpg',
+    'Kubo and the Two Strings': 'https://image.tmdb.org/t/p/w500/3Kr9CIIMcXTPlm6cdZ9y3QTe4Y7.jpg',
+    'Abominable': 'https://image.tmdb.org/t/p/w500/20djTLqppfBx5WYA67Y300S6aPD.jpg',
+    'Spies in Disguise': 'https://image.tmdb.org/t/p/w500/30YacPAcxpNemhhwX0PVUl9pVA3.jpg',
+    'The Willoughbys': 'https://image.tmdb.org/t/p/w500/9WrMmjdZvpxLQh1tCQ9tOd1asOb.jpg',
+    "Ron's Gone Wrong": 'https://image.tmdb.org/t/p/w500/plzgQAXIEHm4Y92ktxU6fedUc8w.jpg',
+    'A Shaun the Sheep Movie: Farmageddon': 'https://image.tmdb.org/t/p/w500/p08FoXVFgcRm5QZBaGj0VKa2W2Y.jpg',
     
-    // Anime & International
-    'https://m.media-amazon.com/images/M/MV5BNGYyNmI3M2YtNzYzZS00OTViLTkxYjAtZDIyZmE1NTUyMzljXkEyXkFqcGdeQXVyMTA4NjE0NjEy._V1_.jpg', // Your Name
-    'https://m.media-amazon.com/images/M/MV5BMjA2Mzg2NDMzNl5BMl5BanBnXkFtZTgwMjcwODUzOTE@._V1_.jpg', // Kubo
-    'https://lumiere-a.akamaihd.net/v1/images/p_coco_19736_fd5fa537.jpeg', // Coco
-    'https://lumiere-a.akamaihd.net/v1/images/p_toystory_19639_517ac405.jpeg', // Toy Story
-    'https://m.media-amazon.com/images/M/MV5BMTg5MzUxNzgxNV5BMl5BanBnXkFtZTgwMTM2NzQ3MjI@._V1_.jpg', // How to Train Dragon
-    'https://m.media-amazon.com/images/M/MV5BMTQ1MjQwMTE5OF5BMl5BanBnXkFtZTgwNjk3MTcyMDE@._V1_.jpg', // Frozen 2
+    // Special bölümü
+    'Spider-Man: Into the Spider-Verse': 'https://image.tmdb.org/t/p/w500/iiZZdoQBEYBv6id8su7ImL0oCbD.jpg',
+    'Up': 'https://image.tmdb.org/t/p/w500/vpbaStTMt8qqXaEgnOR2EE4DNJk.jpg',
+    'Your Name (Kimi no Na wa)': 'https://image.tmdb.org/t/p/w500/q719jXXEzOoYaps6babgKnONONX.jpg',
     
-    // More variety
-    'https://m.media-amazon.com/images/M/MV5BYjQ5NjM0Y2YtNjZkNC00ZDhkLWJjMWItN2QyNzFkMDE3ZjAxXkEyXkFqcGdeQXVyODIxMzk5NjA@._V1_.jpg', // Your Name
-    'https://m.media-amazon.com/images/M/MV5BMjExMTg5OTU0NF5BMl5BanBnXkFtZTcwMjMxMzMzMw@@._V1_.jpg', // WALL-E
-    'https://lumiere-a.akamaihd.net/v1/images/p_thegooddinosaur_19754_63ae22a0.jpeg', // Good Dinosaur
-    'https://m.media-amazon.com/images/M/MV5BNDZmYjNmYTktNDg4OC00Y2Y1LWE4ZGMtOWMyYWQ0OTJlODIwXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg', // Wreck it Ralph
-    'https://m.media-amazon.com/images/M/MV5BMTY3MTI5NjQ4Nl5BMl5BanBnXkFtZTcwOTU1OTU0OQ@@._V1_.jpg', // Frozen
-    'https://m.media-amazon.com/images/M/MV5BOWRiZDIxZjktMTA1NC00MDQ2LWEzMjUtMTliZmY3NjQ3ODJiXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg', // Up 2
-    'https://m.media-amazon.com/images/M/MV5BMTY5MzYzNjc5NV5BMl5BanBnXkFtZTYwNTUyNTc2._V1_.jpg', // Lilo & Stitch 2
-  ];
-  
-  // Rana bölümü için özel görseller
-  const ranaPosters = [
-    'https://media.istockphoto.com/id/1388253782/photo/wilted-and-dried-red-rose-flower-closeup-on-black-background.jpg?s=612x612&w=0&k=20&c=2-jucs6Ng0_ZCdXefcyGq92BGm1JnZ5VpP-PO3gCJ_E=',
-    'https://cdn.pixabay.com/photo/2018/01/05/02/50/love-3061483_1280.jpg',
-    'https://cdn.pixabay.com/photo/2017/11/07/00/07/fantasy-2925250_1280.jpg',
-    'https://cdn.pixabay.com/photo/2019/01/27/22/32/girl-3959203_1280.jpg',
-    'https://cdn.pixabay.com/photo/2018/02/02/23/12/nature-3126513_1280.jpg',
-  ];
-  
-  // Film için bilinen özel posterler var mı kontrol et
-  const specialPosters: Record<string, string> = {
-    'Toy Story Serisi': allPosters[0],
-    'Frozen Serisi': allPosters[1],
-    'The Incredibles Serisi': allPosters[2],
-    'Finding Nemo': allPosters[3],
-    'Zootopia': allPosters[4],
-    'Inside Out': allPosters[5],
-    'Up': allPosters[6],
-    'WALL·E': allPosters[7],
-    'Moana': allPosters[8],
-    'Spider-Man: Into the Spider-Verse': allPosters[9],
-    'Kung Fu Panda Serisi': allPosters[10],
-    'Brave': allPosters[11],
-    'Soul': allPosters[12],
-    'Monsters, Inc.': allPosters[13],
-    'Encanto': allPosters[14],
-    'The Croods': allPosters[15],
-    'Lilo & Stitch': allPosters[16],
-    'Raya and the Last Dragon': allPosters[17],
-    'Your Name (Kimi no Na wa)': allPosters[27],
-    'Sizin Rananız Yok! 🌹': ranaPosters[0],
+    // Rana bölümü
+    'Sizin Rananız Yok! 🌹': 'https://media.istockphoto.com/id/1388253782/photo/wilted-and-dried-red-rose-flower-closeup-on-black-background.jpg?s=612x612&w=0&k=20&c=2-jucs6Ng0_ZCdXefcyGq92BGm1JnZ5VpP-PO3gCJ_E='
   };
   
-  // Önce film için özel poster var mı kontrol et
-  if (specialPosters[title]) {
-    return specialPosters[title];
+  // Filmin posterini kontrol et
+  if (posterMap[title]) {
+    return posterMap[title];
   }
   
-  // Eğer Rana bölümündeyse, özel Rana posterlerinden seç
-  if (section === 'rana') {
-    // Film başlığından benzersiz bir index oluştur
-    const titleIndex = uniqueHash % ranaPosters.length;
-    return ranaPosters[titleIndex];
-  }
+  // Eğer filmin posteri yoksa, sabit kaliteli resimler içeren bir dizi
+  const fallbackPosters = [
+    'https://image.tmdb.org/t/p/w500/uXDfjJbdP4ijW5hWSBrPrlKpxab.jpg', // Toy Story
+    'https://image.tmdb.org/t/p/w500/kgwjIb2JDHRhNk13lmSxiClFjVQ.jpg', // Frozen
+    'https://image.tmdb.org/t/p/w500/2mUqHJG4Y5Ux5oTPKN51kQ3PRwx.jpg', // Incredibles
+    'https://image.tmdb.org/t/p/w500/hlK0e0wAQ3VLuJcsfIYPvb4JVud.jpg', // Zootopia
+    'https://image.tmdb.org/t/p/w500/2H1TmgdfNtsKlU9jKdeNyYL5y8T.jpg', // Inside Out
+    'https://image.tmdb.org/t/p/w500/4j0PNHkMr5ax3IA8tjtxcmPU3QT.jpg', // Encanto
+    'https://image.tmdb.org/t/p/w500/jTswp6KyDYKtvC52GbHagrZbGvD.jpg', // Luca
+    'https://image.tmdb.org/t/p/w500/4Y1WNkd88JXmGfhtWR7dmDAo1T2.jpg', // Elemental
+    'https://image.tmdb.org/t/p/w500/hm58Jw4Lw8OIeECIq5qyPYhAeRJ.jpg', // Soul
+    'https://image.tmdb.org/t/p/w500/4JeRiWOvP6qcvwHXZyXtbK9JPVR.jpg', // Moana
+  ];
   
-  // Film için benzersiz bir poster seç 
-  // (title ve hash değeri kullanarak her film için her zaman aynı poster döner)
-  const posterIndex = uniqueHash % allPosters.length;
-  return allPosters[posterIndex];
+  // Eğer özel bir poster yoksa, diziden bir tanesini seç
+  // İndeks ve film adı kullanarak her zaman aynı posteri döndür
+  const hash = title.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  const posterIndex = (hash + index) % fallbackPosters.length;
+  
+  return fallbackPosters[posterIndex];
 };
-
-// Bir diziyi karıştırma fonksiyonu
-function shuffleArray<T>(array: T[]): T[] {
-  const newArray = [...array];
-  for (let i = newArray.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-  }
-  return newArray;
-}
 
 // Tüm filmleri geç ve resim URL'lerini düzelt
 const updateImageUrls = () => {
