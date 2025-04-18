@@ -300,78 +300,77 @@ const movies = {
 
 // Film verileri için görsel kaynağı
 const getMovieImage = (title: string, index: number, section: string = '') => {
-  // Film adına göre poster URL'sini belirle
-  const filmPosters: Record<string, string> = {
-    // İzlediklerim bölümü
+  // En popüler filmler için posterler
+  const topFilmPosters: Record<string, string> = {
     'Toy Story Serisi': 'https://m.media-amazon.com/images/M/MV5BMDU2ZWJlMjktMTRhMy00ZTA5LWEzNDgtYmNmZTEwZTViZWJkXkEyXkFqcGdeQXVyNDQ2OTk4MzI@._V1_.jpg',
-    'Kung Fu Panda Serisi': 'https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p170977_p_v8_az.jpg',
-    'Madagaskar Serisi': 'https://m.media-amazon.com/images/M/MV5BZTY3YzZhY2QtYTY5ZC00ZTY4LWFkM2QtODRmMGJmOThjYmYwXkEyXkFqcGdeQXVyMTEwODg2MDY@._V1_.jpg',
-    'Zootopia': 'https://resizing.flixster.com/QIoVbPhKJHgbeJ1FGXgImVEEkBk=/v3/t/assets/p12575562_p_v10_aa.jpg',
-    'Big Hero 6': 'https://lumiere-a.akamaihd.net/v1/images/p_bighero6_19753_20bd6206.jpeg',
-    'Cars Serisi': 'https://lumiere-a.akamaihd.net/v1/images/p_cars_19643_4edd6068.jpeg',
-    'How to Train Your Dragon Serisi': 'https://m.media-amazon.com/images/M/MV5BMjA5NDQyMjc2NF5BMl5BanBnXkFtZTcwMjg5ODcyMw@@._V1_.jpg',
-    'The Incredibles Serisi': 'https://m.media-amazon.com/images/M/MV5BMTY5OTU0OTc2NV5BMl5BanBnXkFtZTcwMzU4MDcyMQ@@._V1_.jpg',
-    'Monsters, Inc.': 'https://m.media-amazon.com/images/M/MV5BMTY1NTI0ODUyOF5BMl5BanBnXkFtZTgwNTEyNjQ0MDE@._V1_.jpg',
-    'WALL·E': 'https://lumiere-a.akamaihd.net/v1/images/p_walle_19753_63bf7c27.jpeg',
-    'Finding Nemo': 'https://m.media-amazon.com/images/M/MV5BZTAzNWZlNmUtZDEzYi00ZjA5LWIwYjEtZGM1NWE1MjE4YWRhXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg',
-    'Moana': 'https://m.media-amazon.com/images/M/MV5BMjI4MzU5NTExNF5BMl5BanBnXkFtZTgwNzY1MTEwMDI@._V1_.jpg',
-    'Turning Red': 'https://lumiere-a.akamaihd.net/v1/images/p_turningred_22797_1_c17f32af.jpeg',
-    'Inside Out': 'https://lumiere-a.akamaihd.net/v1/images/p_insideout_19751_af12286c.jpeg',
-    'Elemental': 'https://m.media-amazon.com/images/M/MV5BZjYxYWVjMDMtZGRjZS00ZDE4LTk0OWUtMjUyOTI4MmYxNTNjXkEyXkFqcGdeQXVyMTUzMTg2ODkz._V1_.jpg',
-    'Soul': 'https://m.media-amazon.com/images/M/MV5BZGE1MDg5M2MtNTkyZS00MTY5LTg1YjAtZTlhZmM1Y2EwNmFmXkEyXkFqcGdeQXVyNjA3OTI0MDc@._V1_.jpg',
-    'Onward': 'https://lumiere-a.akamaihd.net/v1/images/p_onward_19723_dbb512cb.jpeg',
-    'Brave': 'https://lumiere-a.akamaihd.net/v1/images/p_brave_20488_9e833e2b.jpeg',
-    'Puss in Boots: The Last Wish': 'https://m.media-amazon.com/images/M/MV5BNjMyMDBjMGUtNDUzZi00N2MwLTg1MjItZTk2MDE1OTZmNTYxXkEyXkFqcGdeQXVyMTQ5NjA0NDM0._V1_.jpg',
-    'Despicable Me Serisi': 'https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p7597_p_v8_az.jpg',
     'Frozen Serisi': 'https://lumiere-a.akamaihd.net/v1/images/p_frozen_18373_3131259c.jpeg',
-    'Tangled': 'https://lumiere-a.akamaihd.net/v1/images/p_tangled_20509_cd0a5809.jpeg',
-    'The Mitchells vs. The Machines': 'https://upload.wikimedia.org/wikipedia/en/6/64/The_Mitchells_vs._the_Machines_film_poster.jpg',
-    'Cloudy with a Chance of Meatballs': 'https://m.media-amazon.com/images/M/MV5BMTg0MjAwNDI5MV5BMl5BanBnXkFtZTcwODkyMzg2Mg@@._V1_.jpg',
-    'Wreck-It Ralph': 'https://lumiere-a.akamaihd.net/v1/images/p_wreckitralph_19473_20a822f4.jpeg',
-    'Megamind': 'https://m.media-amazon.com/images/M/MV5BMTAzMzI0NTMzNDBeQTJeQWpwZ15BbWU3MDM3NTAyOTM@._V1_.jpg',
-    'The Lego Movie': 'https://m.media-amazon.com/images/M/MV5BMTg4MDk1ODExN15BMl5BanBnXkFtZTgwNzIyNjg3MDE@._V1_.jpg',
+    'The Incredibles Serisi': 'https://m.media-amazon.com/images/M/MV5BMTY5OTU0OTc2NV5BMl5BanBnXkFtZTcwMzU4MDcyMQ@@._V1_.jpg',
+    'Finding Nemo': 'https://m.media-amazon.com/images/M/MV5BZTAzNWZlNmUtZDEzYi00ZjA5LWIwYjEtZGM1NWE1MjE4YWRhXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg',
+    'Zootopia': 'https://resizing.flixster.com/QIoVbPhKJHgbeJ1FGXgImVEEkBk=/v3/t/assets/p12575562_p_v10_aa.jpg',
+    'Inside Out': 'https://lumiere-a.akamaihd.net/v1/images/p_insideout_19751_af12286c.jpeg',
+    'Up': 'https://m.media-amazon.com/images/M/MV5BMTk3NDE2NzI4NF5BMl5BanBnXkFtZTgwNzE1MzEyMTE@._V1_.jpg',
+    'WALL·E': 'https://lumiere-a.akamaihd.net/v1/images/p_walle_19753_63bf7c27.jpeg',
+    'Moana': 'https://m.media-amazon.com/images/M/MV5BMjI4MzU5NTExNF5BMl5BanBnXkFtZTgwNzY1MTEwMDI@._V1_.jpg',
+    'Spider-Man: Into the Spider-Verse': 'https://m.media-amazon.com/images/M/MV5BMjMwNDkxMTgzOF5BMl5BanBnXkFtZTgwNTkwNTQ3NjM@._V1_.jpg',
+    'Sizin Rananız Yok! 🌹': 'https://media.istockphoto.com/id/1388253782/photo/wilted-and-dried-red-rose-flower-closeup-on-black-background.jpg?s=612x612&w=0&k=20&c=2-jucs6Ng0_ZCdXefcyGq92BGm1JnZ5VpP-PO3gCJ_E=',
+    'Kung Fu Panda Serisi': 'https://m.media-amazon.com/images/M/MV5BODJkZTZhMWItMDI3Yy00ZWZlLTk4NjQtOTI1ZjU5NjBjZTVjXkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_.jpg',
+    'Brave': 'https://lumiere-a.akamaihd.net/v1/images/p_brave_20488_9e833e2b.jpeg',
+    'Soul': 'https://m.media-amazon.com/images/M/MV5BZGE1MDg5M2MtNTkyZS00MTY5LTg1YjAtZTlhZmM1Y2EwNmFmXkEyXkFqcGdeQXVyNjA3OTI0MDc@._V1_.jpg',
+    'Monsters, Inc.': 'https://m.media-amazon.com/images/M/MV5BMTY1NTI0ODUyOF5BMl5BanBnXkFtZTgwNTEyNjQ0MDE@._V1_.jpg',
     'Encanto': 'https://m.media-amazon.com/images/M/MV5BNjE5NzA4ZDctOTJkZi00NzM0LTkwOTYtMDI4MmNkMzIxODhkXkEyXkFqcGdeQXVyNjY1MTg4Mzc@._V1_.jpg',
-    'Luca': 'https://m.media-amazon.com/images/M/MV5BZTQyNDQwNTQtMTUxMy00ZTdmLWI5ODEtMjE5MzI4NmU5MmQ5XkEyXkFqcGdeQXVyMTA1OTcyNDQ4._V1_.jpg',
-    'Monsters University': 'https://lumiere-a.akamaihd.net/v1/images/p_monstersuniversity_20135_3f2af2bf.jpeg',
-    'Sing': 'https://m.media-amazon.com/images/M/MV5BMTYzODYzODU2Ml5BMl5BanBnXkFtZTgwNTc1MTA2NzE@._V1_.jpg',
-    'Minions': 'https://m.media-amazon.com/images/M/MV5BMTg2MTMyMzU0M15BMl5BanBnXkFtZTgwOTU3ODk4NTE@._V1_.jpg',
-    'Rango': 'https://m.media-amazon.com/images/M/MV5BMTc4NjEyODE1OV5BMl5BanBnXkFtZTcwMjYzNTkxNA@@._V1_.jpg',
-    'Flushed Away': 'https://m.media-amazon.com/images/M/MV5BMTI1MzE1MDk2N15BMl5BanBnXkFtZTYwMjEwMzI3._V1_.jpg',
-    'Robots': 'https://m.media-amazon.com/images/M/MV5BZmJhNTQwY2MtYTU0Yy00MjY5LTk5YWMtZTdiMDFlNmZhNWI4XkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg',
-    "Surf's Up": 'https://m.media-amazon.com/images/M/MV5BMjE4NDE3NzcwM15BMl5BanBnXkFtZTcwMTI0ODYzMw@@._V1_.jpg',
-    'The Peanuts Movie': 'https://m.media-amazon.com/images/M/MV5BNTE5NzMxNzkwNl5BMl5BanBnXkFtZTgwOTQ0Nzk5NzE@._V1_.jpg',
-    'The Angry Birds Movie': 'https://m.media-amazon.com/images/M/MV5BMTY3MjU0NDA0OF5BMl5BanBnXkFtZTgwNTc0MTU3OTE@._V1_.jpg',
-    'Epic': 'https://m.media-amazon.com/images/M/MV5BMTgyNDYwNzQ3OV5BMl5BanBnXkFtZTcwMzUyODM5OA@@._V1_.jpg',
-    'The Good Dinosaur': 'https://lumiere-a.akamaihd.net/v1/images/p_thegooddinosaur_19754_63ae22a0.jpeg',
-    
-    // Depo (İzleyeceklerim) bölümü
-    'Raya and the Last Dragon': 'https://m.media-amazon.com/images/M/MV5BZWNiOTc4NGItNGY4YS00ZGNkLThkOWEtMDE2ODcxODEwNjkwXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg',
-    'Shark Tale': 'https://m.media-amazon.com/images/M/MV5BMTMxMjY0NzE2M15BMl5BanBnXkFtZTcwNTc3ODcyMQ@@._V1_.jpg',
     'The Croods': 'https://m.media-amazon.com/images/M/MV5BMTcyOTc2OTA1Ml5BMl5BanBnXkFtZTcwOTI1MjkzOQ@@._V1_.jpg',
     'Lilo & Stitch': 'https://m.media-amazon.com/images/M/MV5BMTkwOTU5MTA2M15BMl5BanBnXkFtZTYwMjYyNzk2._V1_.jpg',
-    'Kubo and the Two Strings': 'https://m.media-amazon.com/images/M/MV5BMjA2Mzg2NDMzNl5BMl5BanBnXkFtZTgwMjcwODUzOTE@._V1_.jpg',
-    'Abominable': 'https://m.media-amazon.com/images/M/MV5BMTYzMDM4NzkxOV5BMl5BanBnXkFtZTgwNzM1Mzg2NzM@._V1_.jpg',
-    'Spies in Disguise': 'https://m.media-amazon.com/images/M/MV5BNzg1MzM3OWUtNjgzZC00NjMzLWE1NzAtOThiMDgyMjhhZDBhXkEyXkFqcGdeQXVyODkzNTgxMDg@._V1_.jpg',
-    'The Willoughbys': 'https://m.media-amazon.com/images/M/MV5BYWQyYWMzYTctMTdkMy00ODk5LWFiZDQtOTNhOTY0OTI2NWNmXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg',
-    "Ron's Gone Wrong": 'https://m.media-amazon.com/images/M/MV5BOTNmZGU4MGYtNzllMC00MzU1LWJiMjQtNDYxNjA5ZWEyMzVkXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg',
-    'A Shaun the Sheep Movie: Farmageddon': 'https://m.media-amazon.com/images/M/MV5BYTVjYWJmMWQtYWU4Ni00MWJiLWIwYzktODg2YTVkN2Q4YjhmXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg',
-
-    // Özel Seçimler bölümü
-    'Spider-Man: Into the Spider-Verse': 'https://m.media-amazon.com/images/M/MV5BMjMwNDkxMTgzOF5BMl5BanBnXkFtZTgwNTkwNTQ3NjM@._V1_.jpg',
-    'Up': 'https://m.media-amazon.com/images/M/MV5BMTk3NDE2NzI4NF5BMl5BanBnXkFtZTgwNzE1MzEyMTE@._V1_.jpg',
+    'Raya and the Last Dragon': 'https://m.media-amazon.com/images/M/MV5BZWNiOTc4NGItNGY4YS00ZGNkLThkOWEtMDE2ODcxODEwNjkwXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg',
     'Your Name (Kimi no Na wa)': 'https://m.media-amazon.com/images/M/MV5BNGYyNmI3M2YtNzYzZS00OTViLTkxYjAtZDIyZmE1NTUyMzljXkEyXkFqcGdeQXVyMTA4NjE0NjEy._V1_.jpg',
-
-    // Rana bölümü
-    'Sizin Rananız Yok! 🌹': 'https://media.istockphoto.com/id/1388253782/photo/wilted-and-dried-red-rose-flower-closeup-on-black-background.jpg?s=612x612&w=0&k=20&c=2-jucs6Ng0_ZCdXefcyGq92BGm1JnZ5VpP-PO3gCJ_E=',
   };
 
-  // Eğer film ismi poster listesinde varsa onu kullan, yoksa varsayılan poster
-  if (filmPosters[title]) {
-    return filmPosters[title];
+  // Kategori bazlı yedek posterler (eğer film spesifik posteri bulunamazsa)
+  const categoryPosters: Record<string, string[]> = {
+    'watched': [
+      'https://lumiere-a.akamaihd.net/v1/images/p_coco_19736_fd5fa537.jpeg',
+      'https://lumiere-a.akamaihd.net/v1/images/p_toystory_19639_517ac405.jpeg',
+      'https://m.media-amazon.com/images/M/MV5BMTg5MzUxNzgxNV5BMl5BanBnXkFtZTgwMTM2NzQ3MjI@._V1_.jpg',
+      'https://m.media-amazon.com/images/M/MV5BMTQ1MjQwMTE5OF5BMl5BanBnXkFtZTgwNjk3MTcyMDE@._V1_.jpg',
+      'https://m.media-amazon.com/images/M/MV5BZTQyNDQwNTQtMTUxMy00ZTdmLWI5ODEtMjE5MzI4NmU5MmQ5XkEyXkFqcGdeQXVyMTA1OTcyNDQ4._V1_.jpg',
+      'https://m.media-amazon.com/images/M/MV5BYjQ5NjM0Y2YtNjZkNC00ZDhkLWJjMWItN2QyNzFkMDE3ZjAxXkEyXkFqcGdeQXVyODIxMzk5NjA@._V1_.jpg',
+      'https://m.media-amazon.com/images/M/MV5BMjExMTg5OTU0NF5BMl5BanBnXkFtZTcwMjMxMzMzMw@@._V1_.jpg',
+      'https://lumiere-a.akamaihd.net/v1/images/p_thegooddinosaur_19754_63ae22a0.jpeg',
+    ],
+    'explore': [
+      'https://m.media-amazon.com/images/M/MV5BNDZmYjNmYTktNDg4OC00Y2Y1LWE4ZGMtOWMyYWQ0OTJlODIwXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg',
+      'https://m.media-amazon.com/images/M/MV5BMTY3MTI5NjQ4Nl5BMl5BanBnXkFtZTcwOTU1OTU0OQ@@._V1_.jpg',
+      'https://m.media-amazon.com/images/M/MV5BOWRiZDIxZjktMTA1NC00MDQ2LWEzMjUtMTliZmY3NjQ3ODJiXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg',
+      'https://m.media-amazon.com/images/M/MV5BMTY5MzYzNjc5NV5BMl5BanBnXkFtZTYwNTUyNTc2._V1_.jpg',
+      'https://m.media-amazon.com/images/M/MV5BNjE5NzA4ZDctOTJkZi00NzM0LTkwOTYtMDI4MmNkMzIxODhkXkEyXkFqcGdeQXVyNjY1MTg4Mzc@._V1_.jpg',
+    ],
+    'special': [
+      'https://m.media-amazon.com/images/M/MV5BOWY4MmFiY2QtMzE1YS00NTg1LWIwOTQtYTI4ZGUzNWIxNTVmXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_.jpg',
+      'https://m.media-amazon.com/images/M/MV5BMjM2MDgxMDg0Nl5BMl5BanBnXkFtZTgwNTM2OTM5NDE@._V1_.jpg',
+      'https://m.media-amazon.com/images/M/MV5BMTk5MzU1MDMwMF5BMl5BanBnXkFtZTgwODkzODc5NTE@._V1_.jpg',
+    ],
+    'rana': [
+      'https://cdn.pixabay.com/photo/2018/01/05/02/50/love-3061483_1280.jpg',
+      'https://cdn.pixabay.com/photo/2017/11/07/00/07/fantasy-2925250_1280.jpg',
+      'https://cdn.pixabay.com/photo/2019/01/27/22/32/girl-3959203_1280.jpg',
+      'https://cdn.pixabay.com/photo/2018/02/02/23/12/nature-3126513_1280.jpg',
+    ],
+  };
+
+  // Önce film için özel posteri ara
+  if (topFilmPosters[title]) {
+    return topFilmPosters[title];
   }
   
-  // Varsayılan poster - eğer listede film bulunamazsa
-  return `https://picsum.photos/seed/${title.toLowerCase().replace(/\s+/g, '')}/400/600`;
+  // Özel poster yoksa, kategori posterlerinden birini kullan
+  const categoryName = section as keyof typeof categoryPosters;
+  if (categoryPosters[categoryName] && categoryPosters[categoryName].length > 0) {
+    // Film bazında benzersiz index oluştur
+    const posterIndex = Math.abs(title.charCodeAt(0) + index) % categoryPosters[categoryName].length;
+    return categoryPosters[categoryName][posterIndex];
+  }
+  
+  // Son çare - varsayılan görsel
+  return `https://placehold.co/400x600/3498db/ffffff?text=${encodeURIComponent(title)}`;
 };
 
 // Bir diziyi karıştırma fonksiyonu
