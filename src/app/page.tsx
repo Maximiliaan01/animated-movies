@@ -346,7 +346,6 @@ updateImageUrls();
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState<Section>('watched');
-  const [showOnlyWatched, setShowOnlyWatched] = useState(false);
   const [watchedMovieTitles, setWatchedMovieTitles] = useState<string[]>([]);
   const [displayedMovies, setDisplayedMovies] = useState(movies[activeSection]);
 
@@ -364,19 +363,24 @@ export default function Home() {
   useEffect(() => {
     let moviesToShow = [...movies[activeSection]];
     
-    // Rastgele sırala - sadece watched filtrelemesi açık değilse
-    if (!showOnlyWatched) {
-      moviesToShow = shuffleArray(moviesToShow);
-    } 
-    // Sadece izlenen filmleri göster
-    else if (activeSection !== 'rana') {
-      moviesToShow = moviesToShow.filter(movie => 
+    // İzlenen filmleri üstte göster (Rana bölümü hariç)
+    if (activeSection !== 'rana') {
+      // Önce hangi filmlerin izlendiğini belirle
+      const watchedMovies = moviesToShow.filter(movie => 
         watchedMovieTitles.includes(movie.title)
       );
+      
+      // Sonra izlenmemiş filmleri belirle
+      const unwatchedMovies = moviesToShow.filter(movie => 
+        !watchedMovieTitles.includes(movie.title)
+      );
+      
+      // İzlenen filmleri üstte, izlenmeyenleri altta göster
+      moviesToShow = [...watchedMovies, ...unwatchedMovies];
     }
     
     setDisplayedMovies(moviesToShow);
-  }, [activeSection, showOnlyWatched, watchedMovieTitles]);
+  }, [activeSection, watchedMovieTitles]);
 
   return (
     <main className="min-h-screen p-4 md:p-8 bg-gradient-to-b from-blue-950 to-orange-900/10">
@@ -393,7 +397,6 @@ export default function Home() {
               title={section.title}
               onClick={() => {
                 setActiveSection(section.id);
-                setShowOnlyWatched(false); // Bölüm değiştiğinde filtreyi sıfırla
               }}
               isActive={activeSection === section.id}
               color={section.color}
@@ -401,32 +404,10 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Filtre butonu - Rana bölümü hariç gösterilir */}
-        {activeSection !== 'rana' && (
-          <div className="flex justify-center mb-8">
-            <button
-              onClick={() => setShowOnlyWatched(!showOnlyWatched)}
-              className={`
-                px-4 py-2 rounded-lg font-medium flex items-center gap-2
-                transition-colors duration-200
-                ${showOnlyWatched 
-                  ? 'bg-green-500 text-white' 
-                  : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
-                }
-              `}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-              </svg>
-              Sadece İzlediklerimi Göster
-            </button>
-          </div>
-        )}
-
         {/* Film kartları - responsive grid */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={`${activeSection}-${showOnlyWatched}`}
+            key={activeSection}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
