@@ -300,14 +300,9 @@ const movies = {
 
 // Film verileri için görsel kaynağı
 const getMovieImage = (title: string, index: number, section: string = '') => {
-  // Film adının ilk harfini kullan
-  const charCode = title.charCodeAt(0) || 65;
-  const index_offset = index * 37; // Her film için farklı bir renk tonu
-  const hue = (charCode * 137 + index_offset) % 360;
-  const sat = 70 + (index % 20); // Renk doygunluğunu biraz değiştir
-  
   // Kategoriye göre renk şemaları
   let colorScheme = '';
+  
   if (section === 'rana') {
     colorScheme = 'ff6b96,ff8fab'; // Pembe tonları
   } else if (section === 'special') {
@@ -315,14 +310,27 @@ const getMovieImage = (title: string, index: number, section: string = '') => {
   } else if (section === 'explore') {
     colorScheme = 'f59e0b,fbbf24'; // Amber tonları
   } else {
-    colorScheme = '0ea5e9,38bdf8'; // Mavi tonları
+    // İzlediklerim bölümü için farklı renkler
+    const subtypes = ['0ea5e9,38bdf8', '06b6d4,22d3ee', '0284c7,0ea5e9', '0369a1,0284c7'];
+    const subtype = subtypes[index % subtypes.length];
+    colorScheme = subtype; // Farklı mavi tonları
   }
   
-  // Film adını URL için güvenli hale getir
-  const encodedTitle = encodeURIComponent(title);
+  // Film adını URL için güvenli hale getir ve kısalt
+  let displayTitle = title;
+  if (title.length > 25) {
+    const words = title.split(' ');
+    if (words.length > 3) {
+      displayTitle = words.slice(0, 3).join(' ') + '...';
+    } else {
+      displayTitle = title.substring(0, 22) + '...';
+    }
+  }
   
-  // Güvenilir ve hızlı bir görsel servis kullanarak güzel posterler oluştur
-  return `https://placehold.co/400x600/gradient/${colorScheme}?text=${encodedTitle}`;
+  const encodedTitle = encodeURIComponent(displayTitle);
+  
+  // Hızlı, güvenilir ve güzel bir görsel servis kullanarak posterler oluştur
+  return `https://placehold.co/400x600/gradient/${colorScheme}?text=${encodedTitle}&font=bebas`;
 };
 
 // Bir diziyi karıştırma fonksiyonu
